@@ -1,0 +1,140 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+/* the picture covers the whole screen */
+#game {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: url('../images/background.jpg') center / 100% 100%;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+}
+
+.hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 25px;
+  color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+}
+
+#sambosa {
+  position: absolute;
+  top: 40%;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* fire columns the sambosa has to jump through */
+.fire {
+  position: absolute;
+  width: 90px;
+  z-index: 1;
+  background-size: 100% 100%;
+  filter: drop-shadow(0 0 12px rgba(255, 120, 0, 0.8));
+  animation: flicker 0.18s infinite alternate;
+}
+
+/* fire coming up from the pan */
+.from-pan {
+  background-image: url('../images/fire-up.png');
+  transform-origin: bottom;
+}
+
+/* fire hanging from the top */
+.from-top {
+  background-image: url('../images/fire-down.png');
+  transform-origin: top;
+}
+
+@keyframes flicker {
+  from { transform: scale(0.94, 1); }
+  to { transform: scale(1.05, 1.03); }
+}
+
+#screen {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+#title {
+  font-size: 56px;
+  color: #fff;
+  text-shadow: 3px 3px 0 #7a3b00;
+}
+
+/* hide the title on the first screen */
+#title:empty {
+  display: none;
+}
+
+#play-btn {
+  padding: 16px 48px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #fff;
+  background: #e8890c;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px 0 #7a3b00;
+  cursor: pointer;
+}
+
+#play-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #7a3b00;
+}
+
+/* sambosa floats up and down before you start */
+.idle {
+  animation: bob 1s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50% { transform: translateY(-15px) rotate(6deg); }
+}
+
+/* sambosa sinks into the oil and gets darker */
+.fried {
+  transition: top 0.6s ease-in, filter 0.6s;
+  filter: brightness(0.45) sepia(0.6);
+}
+
+.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-10px, 4px); }
+  40% { transform: translate(10px, -4px); }
+  60% { transform: translate(-6px, 2px); }
+  80% { transform: translate(6px, -2px); }
+}
