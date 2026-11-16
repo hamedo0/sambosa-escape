@@ -1,4 +1,4 @@
-<img width="1498" height="965" alt="Ga Sambosa" src="https://github.com/user-attachments/assets/6fb130b8-fad8-4b43-a33c-f277f68a460b" /><img width="1498" height="965" alt="Ga Sambosa" src="https://github.com/user-attachments/assets/32d25ac0-76dc-4002-a30f-f1f71dd317a8" />## Project Planning
+ />## Project Planning
 
 - [Project board](https://github.com/users/hamedo0/projects/2?query=sort%3Aupdated-desc+state%3Aopen)
 - <img width="1498" height="965" alt="Ga Sambosa" src="https://github.com/user-attachments/assets/824c759c-63ac-4b9f-b9e9-870d952e356e" />
