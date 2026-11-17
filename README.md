@@ -11,7 +11,7 @@
 
 ### Sprint 1
 
-Goal: The Sambosa can jump through the fire, pass 15 fires, and win, while avoiding the fire and the oil.
+Goal: The Sambosa can jump through the fire, pass 15 fires, and win, while avoiding the fire and the oil. So, it should not float in the oil inside the pan.
 
 Start: 2026-11-17
 End: 2026-11-25
