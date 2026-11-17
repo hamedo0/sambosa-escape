@@ -1,7 +1,9 @@
  ## Project Planning
 
 - [Project board](https://github.com/users/hamedo0/projects/2?query=sort%3Aupdated-desc+state%3Aopen)
-- [Wire Frame](<img width="2752" height="1536" alt="image" src="https://github.com/user-attachments/assets/a0bfe12a-55c5-4f93-80d9-caf3625e429a" />)
+- [Wireframe]
+<img width="2752" height="1536" alt="image" src="https://github.com/user-attachments/assets/c0b8dd8c-2cc6-4edc-966a-361cb107aecd" />
+
 
 
 
