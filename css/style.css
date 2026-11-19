@@ -11,3 +11,44 @@ body {
   background: #000;
   font-family: 'Trebuchet MS', sans-serif;
 }
+
+#game {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  /* one background picture, changed by JS every 5 points */
+  background-size: cover;
+  background-position: center;
+}
+
+/* top bar: timer left, score middle, best right */
+.hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  padding: 15px 25px;
+  color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+}
+
+.left { justify-self: start; }
+.center { justify-self: center; }
+.right { justify-self: end; }
+
+#sambosa {
+  position: absolute;
+  top: 40%;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
