@@ -52,3 +52,53 @@ body {
   pointer-events: none;
 }
 
+/* small sambosas that make the big one grow */
+.mini {
+  position: absolute;
+  width: 40px;
+  z-index: 2;
+  animation: wiggle 0.8s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: translateY(0) rotate(-12deg); }
+  50% { transform: translateY(-10px) rotate(12deg); }
+}
+
+/* fire = a video. "screen" blend makes its black background invisible */
+.fire {
+  position: absolute;
+  z-index: 1;
+  object-fit: fill;
+  mix-blend-mode: screen;
+  /* the far end of the fire fades out softly */
+  mask-image: linear-gradient(to top, black 78%, transparent);
+}
+
+/* the top fire is the same video, flipped upside down */
+.from-top {
+  transform: scaleY(-1);
+}
+
+/* start, win and lose screen */
+#screen {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+#title {
+  font-size: 56px;
+  color: #fff;
+  text-shadow: 3px 3px 0 #7a3b00;
+}
+
+#title:empty {
+  display: none;
+}
+

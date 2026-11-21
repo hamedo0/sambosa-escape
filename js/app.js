@@ -148,3 +148,78 @@ function move(list) {
   })
   return list.filter(thing => !thing.dead)
 }
+
+//  fire 
+// the fire is a video (a flame animation that loops)
+function makeFire(side, top, fireHeight) {
+  const el = document.createElement('video')
+  el.src = './images/fire.mp4'
+  el.className = 'fire ' + side
+  el.muted = el.loop = el.playsInline = true
+  el.style.width = settings.fireWidth + 'px'
+  el.style.top = top + 'px'
+  el.style.height = fireHeight + 'px'
+  el.style.left = width + 'px'
+  el.currentTime = Math.random() * 6 // so the flames don't all move together
+  el.play()
+  game.append(el)
+  return el
+}
+
+function addFire() {
+  const gapTop = 60 + Math.random() * (oilLine - settings.gapSize - 120)
+  const gapBottom = gapTop + settings.gapSize
+
+  fires.push({
+    x: width,
+    gapTop: gapTop,
+    passed: false,
+    els: [
+      makeFire('from-top', 0, gapTop), // fire hanging from the top
+      makeFire('from-pan', gapBottom, oilLine - gapBottom + 40), // fire from the pan
+    ],
+  })
+
+  // sometimes put a mini sambosa between this pair and the next one
+  if (Math.random() < settings.miniChance) addMini(width + settings.fireSpacing / 2)
+}
+
+// +1 score when the sambosa passes a fire, and change the background every 5
+function countScore() {
+  fires.forEach(f => {
+    if (f.passed || f.x + settings.fireWidth > sambosaLeft) return
+    f.passed = true
+    score++
+    speed += settings.speedUp
+    scoreEl.textContent = score
+
+    setBackground(Math.floor(score / 5) % settings.backgrounds.length)
+  })
+}
+
+// returns the fire we hit, or undefined
+function hitFire() {
+  const pad = 18 // smaller hit box so it feels fair
+  const left = sambosaLeft + pad
+  const right = sambosaLeft + mySize() - pad
+  const top = sambosa.y + pad
+  const bottom = sambosa.y + mySize() - pad
+
+  return fires.find(f => {
+    const insideX = right > f.x + 25 && left < f.x + settings.fireWidth - 25
+    const outsideGap = top < f.gapTop || bottom > f.gapTop + settings.gapSize
+    return insideX && outsideGap
+  })
+}
+
+//  mini sambosas 
+function addMini(x) {
+  const y = 60 + Math.random() * (oilLine - 150)
+  const el = document.createElement('img')
+  el.src = './images/sambosa.png'
+  el.className = 'mini'
+  el.style.width = settings.miniSize + 'px'
+  el.style.top = y + 'px'
+  game.append(el)
+  minis.push({ x: x, y: y, els: [el] })
+}
