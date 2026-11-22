@@ -256,6 +256,7 @@ function addMini(x) {
   const el = document.createElement('img')
   el.src = './images/sambosa.png'
   el.className = 'mini'
+  el.alt = 'A mini sambosa, catch it to grow'
   el.style.width = settings.miniSize + 'px'
   el.style.top = y + 'px'
   game.append(el)
