@@ -19,25 +19,35 @@ body {
   overflow: hidden;
   cursor: pointer;
   user-select: none;
-  /* one background picture, changed by JS every 5 points */
-  background-size: cover;
-  background-position: center;
 }
 
-/* heat haze above the oil: it bends what is behind it */
-#heat {
+/* the picture is always 16:9 and covers the screen, so the flames stay on the burner at any window size */
+#backdrop {
   position: absolute;
-  left: 0;
-  top: 55%;
-  width: 100%;
-  height: 25%;
-  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 177.78vh);
+  aspect-ratio: 16 / 9;
+  transform: translate(-50%, -50%);
+  background-size: 100% 100%;
+}
+
+/* the flames sit in a row under the pan. The JS sets their place from data.js */
+#flames {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   pointer-events: none;
-  backdrop-filter: url(#heat);
-  -webkit-backdrop-filter: url(#heat);
-  /* fade in at the top and bottom so the edges are not sharp */
-  mask-image: linear-gradient(to bottom, transparent, black 40%, black 60%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 40%, black 60%, transparent);
+}
+
+.flame {
+  height: 100%;
+  aspect-ratio: 1.2; /* wider than the video, so the flames are fat and low */
+  object-fit: fill;
+  mix-blend-mode: screen;
+  /* the top of each flame fades out */
+  mask-image: linear-gradient(to top, black 60%, transparent);
 }
 
 /* top bar: timer left, score middle, best right */

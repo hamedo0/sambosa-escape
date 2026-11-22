@@ -16,8 +16,27 @@ const settings = {
   startSpeed: 3.5,
   speedUp: 0.15, // speed added each time you pass a fire
   winScore: 20,
-  backgrounds: ['images/bg1.jpg', 'images/bg2.jpg', 'images/bg3.jpg'],
+  flameCount: 8, // how many flames burn under the pan
 }
+
+// flames: where the burner is, in % of the picture (left, top, width, height)
+const backgrounds = [
+  {
+    image: 'images/bg1.jpg',
+    alt: 'Sunset over the sea with a bridge and the BIBF building, behind a pan of hot oil',
+    flames: { left: 2, top: 84, width: 96, height: 16 },
+  },
+  {
+    image: 'images/bg2.jpg',
+    alt: 'Purple evening sky over the Bahrain skyline and BIBF, behind a pan of hot oil',
+    flames: { left: 2, top: 84, width: 96, height: 16 },
+  },
+  {
+    image: 'images/bg3.jpg',
+    alt: 'City lights at night over the water, behind a pan of hot oil',
+    flames: { left: 2, top: 84, width: 96, height: 16 },
+  },
+]
 
 const messages = {
   win: 'You Win! 🎉',

@@ -1,5 +1,7 @@
 // ---------- elements ----------
 const game = document.querySelector('#game')
+const backdropEl = document.querySelector('#backdrop')
+const flamesEl = document.querySelector('#flames')
 const sambosaEl = document.querySelector('#sambosa')
 const screenEl = document.querySelector('#screen')
 const titleEl = document.querySelector('#title')
@@ -50,7 +52,13 @@ function setSize(newSize) {
 
 function setBackground(index) {
   bgIndex = index
-  game.style.backgroundImage = `url('${settings.backgrounds[index]}')`
+  const bg = backgrounds[index]
+  backdropEl.style.backgroundImage = `url('${bg.image}')`
+  backdropEl.setAttribute('aria-label', bg.alt)
+  flamesEl.style.left = bg.flames.left + '%'
+  flamesEl.style.top = bg.flames.top + '%'
+  flamesEl.style.width = bg.flames.width + '%'
+  flamesEl.style.height = bg.flames.height + '%'
 }
 
 // a new Audio each time, so the same sound can play on top of itself
@@ -165,17 +173,32 @@ function move(list) {
 
 // ---------- fire ----------
 // the fire is a video (a flame animation that loops)
-function makeFire(side, top, fireHeight) {
+function makeVideo(className) {
   const el = document.createElement('video')
   el.src = './images/fire.mp4'
-  el.className = 'fire ' + side
-  el.muted = el.loop = el.playsInline = true
+  el.className = className
+  el.muted = el.loop = el.playsInline = el.autoplay = true
+  el.setAttribute('aria-hidden', 'true')
+  el.currentTime = Math.random() * 6 // so the flames don't all move together
+  return el
+}
+
+// the flames under the pan, the same video as the fire (paused if you prefer less motion)
+function makeFlames() {
+  const lessMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  for (let i = 0; i < settings.flameCount; i++) {
+    const el = makeVideo('flame')
+    el.autoplay = !lessMotion
+    flamesEl.append(el)
+  }
+}
+
+function makeFire(side, top, fireHeight) {
+  const el = makeVideo('fire ' + side)
   el.style.width = settings.fireWidth + 'px'
   el.style.top = top + 'px'
   el.style.height = fireHeight + 'px'
   el.style.left = width + 'px'
-  el.currentTime = Math.random() * 6 // so the flames don't all move together
-  el.play()
   game.append(el)
   return el
 }
@@ -208,7 +231,7 @@ function countScore() {
     scoreEl.textContent = score
     if (score < settings.winScore) playSound('point')
 
-    setBackground(Math.floor(score / 5) % settings.backgrounds.length)
+    setBackground(Math.floor(score / 5) % backgrounds.length)
   })
 }
 
@@ -283,6 +306,7 @@ function endGame(result) {
 
 // ---------- controls ----------
 updateSizes()
+makeFlames()
 setBackground(0) // show the first picture on the start screen
 window.addEventListener('resize', updateSizes)
 playBtn.addEventListener('click', startGame)
