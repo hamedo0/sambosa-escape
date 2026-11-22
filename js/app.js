@@ -7,6 +7,7 @@ const playBtn = document.querySelector('#play-btn')
 const timerEl = document.querySelector('#timer')
 const scoreEl = document.querySelector('#score')
 const bestEl = document.querySelector('#best')
+const muteBtn = document.querySelector('#mute-btn')
 document.querySelector('#goal').textContent = settings.winScore
 
 // ---------- game state ----------
@@ -26,6 +27,10 @@ let height = 0
 let oilLine = 0
 let sambosaLeft = 0
 let best = Number(localStorage.getItem('sambosaBest')) || 0
+let muted = false
+const crackle = new Audio(sounds.crackle.file)
+crackle.loop = true
+crackle.volume = sounds.crackle.volume
 bestEl.textContent = best
 
 // ---------- helpers ----------
@@ -46,6 +51,28 @@ function setSize(newSize) {
 function setBackground(index) {
   bgIndex = index
   game.style.backgroundImage = `url('${settings.backgrounds[index]}')`
+}
+
+// a new Audio each time, so the same sound can play on top of itself
+function playSound(name) {
+  if (muted) return
+  const audio = new Audio(sounds[name].file)
+  audio.volume = sounds[name].volume
+  audio.play().catch(() => {}) // ignore it if the browser blocks the sound
+}
+
+// the fire crackle plays only while you are playing and not muted
+function updateCrackle() {
+  if (state === 'playing' && !muted) crackle.play().catch(() => {})
+  else crackle.pause()
+}
+
+function setMuted(value) {
+  muted = value
+  localStorage.setItem('sambosaMuted', muted)
+  muteBtn.setAttribute('aria-pressed', muted)
+  muteBtn.firstElementChild.textContent = muted ? '🔇' : '🔊'
+  updateCrackle()
 }
 
 function kill(thing) {
@@ -75,13 +102,16 @@ function startGame() {
   screenEl.style.display = 'none'
   playBtn.blur()
   state = 'playing'
+  updateCrackle()
 
   clearInterval(loop)
   loop = setInterval(update, 16) // about 60 times per second
 }
 
 function jump() {
-  if (state === 'playing') sambosa.velocity = settings.jumpPower
+  if (state !== 'playing') return
+  sambosa.velocity = settings.jumpPower
+  playSound('jump')
 }
 
 // ---------- main loop ----------
@@ -113,6 +143,7 @@ function update() {
   // touching fire: a small sambosa loses, a bigger one shrinks a bit
   const hit = hitFire()
   if (hit) {
+    playSound('hurt')
     if (sambosa.size <= settings.startSize) return endGame('fire')
     setSize(sambosa.size - settings.growStep)
     kill(hit)
@@ -175,6 +206,7 @@ function countScore() {
     score++
     speed += settings.speedUp
     scoreEl.textContent = score
+    if (score < settings.winScore) playSound('point')
 
     setBackground(Math.floor(score / 5) % settings.backgrounds.length)
   })
@@ -216,6 +248,7 @@ function eatMinis() {
       sambosa.y < m.y + settings.miniSize && sambosa.y + size > m.y
     if (touching) {
       kill(m)
+      playSound('grow')
       setSize(Math.min(settings.maxSize, sambosa.size + settings.growStep))
     }
   })
@@ -227,6 +260,7 @@ function endGame(result) {
   state = 'over'
   clearInterval(loop)
   endTime = Date.now()
+  updateCrackle()
 
   if (score > best) {
     best = score
@@ -235,10 +269,12 @@ function endGame(result) {
   }
 
   titleEl.textContent = result === 'win' ? messages.win : messages.lose
+  playSound(result === 'win' ? 'win' : 'lose')
   if (result !== 'win') game.classList.add('shake')
   if (result === 'oil') {
     sambosaEl.classList.add('fried')
     sambosaEl.style.top = oilLine + 'px' // sink into the oil
+    playSound('sizzle')
   }
 
   playBtn.textContent = messages.playAgain
@@ -250,12 +286,15 @@ updateSizes()
 setBackground(0) // show the first picture on the start screen
 window.addEventListener('resize', updateSizes)
 playBtn.addEventListener('click', startGame)
+muteBtn.addEventListener('click', () => setMuted(!muted))
+setMuted(localStorage.getItem('sambosaMuted') === 'true')
 game.addEventListener('pointerdown', jump)
 
 // Space and Up Arrow both make the sambosa jump
 document.addEventListener('keydown', e => {
   const isJumpKey = e.code === 'Space' || e.code === 'ArrowUp'
   if (!isJumpKey) return
+  if (e.target.tagName === 'BUTTON' && state !== 'playing') return // buttons use Space themselves
   e.preventDefault() // stop the page from scrolling
 
   if (state === 'playing') jump()

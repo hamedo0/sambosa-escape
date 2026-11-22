@@ -24,3 +24,15 @@ const messages = {
   lose: 'Game Over',
   playAgain: '↻ Play Again',
 }
+
+// file and volume (0 to 1) for each sound
+const sounds = {
+  jump: { file: 'sounds/jump.mp3', volume: 0.5 },
+  point: { file: 'sounds/point.mp3', volume: 0.6 },
+  grow: { file: 'sounds/grow.mp3', volume: 0.6 },
+  hurt: { file: 'sounds/hurt.mp3', volume: 0.7 },
+  sizzle: { file: 'sounds/sizzle.mp3', volume: 0.7 },
+  lose: { file: 'sounds/lose.mp3', volume: 0.7 },
+  win: { file: 'sounds/win.mp3', volume: 0.7 },
+  crackle: { file: 'sounds/crackle.mp3', volume: 0.25 }, // loops while you play
+}
