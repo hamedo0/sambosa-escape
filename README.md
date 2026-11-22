@@ -1,8 +1,8 @@
-# GA Sambosa
+# Sambosa Escape
 
-![Screenshot of GA Sambosa](screenshot.png)
+![Screenshot of Sambosa Escape](screenshot.png)
 
-GA Sambosa is a game I made for my first General Assembly project. You play a sambosa that is trying to escape a hot frying pan. The sambosa keeps falling down, so you have to jump to get through the gaps in the fire. If you touch the fire when you are small, or fall into the oil, you lose. The score goes up by 1 each time you pass a fire. Get 20 points to win.
+Sambosa Escape is a game I made for my first General Assembly project. You play a sambosa that is trying to escape a hot frying pan. The sambosa keeps falling down, so you have to jump to get through the gaps in the fire. If you touch the fire when you are small, or fall into the oil, you lose. The score goes up by 1 each time you pass a fire. Get 20 points to win.
 
 The background changes as your score goes up, and the flames under the pan are moving. There are mini sambosas on the way. If you catch one, your sambosa gets bigger. A bigger sambosa can touch the fire once and just get smaller. The game also gets faster as you score. It saves your best score in the browser.
 
