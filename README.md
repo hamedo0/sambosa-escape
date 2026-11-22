@@ -55,6 +55,6 @@ Game Over Screen:
 
 ## Credits
 
-- Images: I generated from internet 
+- Images: I generated from CHATGPT  
 - Fire video: fire.mp4 source from Google
 - Sound effects from Google
