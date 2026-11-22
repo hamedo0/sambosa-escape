@@ -43,9 +43,10 @@ Playing screen:
 - Add a pause button.
 - Add more fire patterns.
 - Add a difficulty choice.
+- 
 
 ## Credits
 
-- Images: TODO: AI image tool name
-- Fire video: TODO: fire.mp4 source
-- Sound effects made with Claude (AI)
+- Images: I generated from internet 
+- Fire video: fire.mp4 source from Google
+- Sound effects from Google
