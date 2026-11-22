@@ -1,24 +1,25 @@
-// settings 
+// ---------- settings (change numbers here) ----------
 const settings = {
-  oilLevel: 0.69, 
+  oilLevel: 0.69, // oil starts at 69% of the screen height
   gravity: 0.45,
   jumpPower: -8,
-  maxFall: 10, 
-  sambosaX: 0.15, 
-  sambosaSize: 80,
-  bigSize: 130, 
+  maxFall: 10, // the sambosa can't fall faster than this
+  sambosaX: 0.15, // 15% from the left
+  startSize: 45, // size at the start
+  growStep: 12, // how much it grows (or shrinks) each time
+  maxSize: 120, // it can't grow bigger than this
   fireWidth: 100,
-  gapSize: 200, 
-  fireSpacing: 380, 
+  gapSize: 200, // space between top fire and bottom fire
+  fireSpacing: 380, // distance between each pair of fires
   miniSize: 40,
-  miniChance: 0.4,
+  miniChance: 0.4, // chance of a mini sambosa after each pair
   startSpeed: 3.5,
-  speedUp: 0.15, 
+  speedUp: 0.15, // speed added each time you pass a fire
   winScore: 20,
   backgrounds: ['images/bg1.jpg', 'images/bg2.jpg', 'images/bg3.jpg'],
 }
 
-//  elements 
+// ---------- elements ----------
 const game = document.querySelector('#game')
 const sambosaEl = document.querySelector('#sambosa')
 const screenEl = document.querySelector('#screen')
@@ -29,14 +30,15 @@ const scoreEl = document.querySelector('#score')
 const bestEl = document.querySelector('#best')
 document.querySelector('#goal').textContent = settings.winScore
 
-//  game state 
-let state = 'start'
-let sambosa = { y: 0, velocity: 0, big: false }
-let fires = [] 
-let minis = [] 
+// ---------- game state ----------
+let state = 'start' // start, playing, over
+let sambosa = { y: 0, velocity: 0, size: settings.startSize }
+let fires = [] // each fire: { x, gapTop, passed, els: [topVideo, bottomVideo] }
+let minis = [] // each mini: { x, y, els: [image] }
 let score = 0
 let timer = 0
 let speed = 0
+let wobble = 0 // counts up each frame to move the wobble
 let bgIndex = 0
 let loop = null
 let endTime = 0
@@ -47,7 +49,7 @@ let sambosaLeft = 0
 let best = Number(localStorage.getItem('sambosaBest')) || 0
 bestEl.textContent = best
 
-//  helpers 
+// ---------- helpers ----------
 function updateSizes() {
   width = game.clientWidth
   height = game.clientHeight
@@ -56,13 +58,10 @@ function updateSizes() {
   sambosaEl.style.left = sambosaLeft + 'px'
 }
 
-function mySize() {
-  return sambosa.big ? settings.bigSize : settings.sambosaSize
-}
-
-function setBig(isBig) {
-  sambosa.big = isBig
-  sambosaEl.style.width = mySize() + 'px'
+// change the sambosa's size (in pixels)
+function setSize(newSize) {
+  sambosa.size = newSize
+  sambosaEl.style.width = newSize + 'px'
 }
 
 function setBackground(index) {
@@ -75,7 +74,7 @@ function kill(thing) {
   thing.dead = true
 }
 
-//  start the round 
+// ---------- start the round ----------
 function startGame() {
   updateSizes()
   fires.concat(minis).forEach(kill)
@@ -84,9 +83,10 @@ function startGame() {
 
   score = 0
   timer = 0
+  wobble = 0
   speed = settings.startSpeed
-  sambosa = { y: height * 0.35, velocity: 0, big: false }
-  setBig(false)
+  sambosa = { y: height * 0.35, velocity: 0, size: settings.startSize }
+  setSize(settings.startSize)
 
   scoreEl.textContent = 0
   timerEl.textContent = '0.0'
@@ -98,14 +98,14 @@ function startGame() {
   state = 'playing'
 
   clearInterval(loop)
-  loop = setInterval(update, 16)
+  loop = setInterval(update, 16) // about 60 times per second
 }
 
 function jump() {
   if (state === 'playing') sambosa.velocity = settings.jumpPower
 }
 
-//  main loop 
+// ---------- main loop ----------
 function update() {
   timer += 0.016
   timerEl.textContent = timer.toFixed(1)
@@ -113,7 +113,11 @@ function update() {
   // gravity pulls down, jump pushes up
   sambosa.velocity = Math.min(sambosa.velocity + settings.gravity, settings.maxFall)
   sambosa.y = Math.max(0, sambosa.y + sambosa.velocity)
-  const angle = Math.max(-25, Math.min(45, sambosa.velocity * 4))
+
+  // the sambosa wobbles left and right, and wobbles faster as the score grows
+  wobble += 0.1 + score * 0.02
+  const tilt = Math.max(-25, Math.min(45, sambosa.velocity * 4)) // up when jumping, down when falling
+  const angle = tilt + Math.sin(wobble) * 6
   sambosaEl.style.top = sambosa.y + 'px'
   sambosaEl.style.transform = `rotate(${angle}deg)`
 
@@ -125,13 +129,13 @@ function update() {
   minis = move(minis)
   countScore()
 
-  if (sambosa.y + mySize() > oilLine) return endGame('oil')
+  if (sambosa.y + sambosa.size > oilLine) return endGame('oil')
 
-  // touching fire: a big sambosa shrinks, a small one loses
+  // touching fire: a small sambosa loses, a bigger one shrinks a bit
   const hit = hitFire()
   if (hit) {
-    if (!sambosa.big) return endGame('fire')
-    setBig(false)
+    if (sambosa.size <= settings.startSize) return endGame('fire')
+    setSize(sambosa.size - settings.growStep)
     kill(hit)
   }
 
@@ -149,7 +153,7 @@ function move(list) {
   return list.filter(thing => !thing.dead)
 }
 
-//  fire 
+// ---------- fire ----------
 // the fire is a video (a flame animation that loops)
 function makeFire(side, top, fireHeight) {
   const el = document.createElement('video')
@@ -201,9 +205,9 @@ function countScore() {
 function hitFire() {
   const pad = 18 // smaller hit box so it feels fair
   const left = sambosaLeft + pad
-  const right = sambosaLeft + mySize() - pad
+  const right = sambosaLeft + sambosa.size - pad
   const top = sambosa.y + pad
-  const bottom = sambosa.y + mySize() - pad
+  const bottom = sambosa.y + sambosa.size - pad
 
   return fires.find(f => {
     const insideX = right > f.x + 25 && left < f.x + settings.fireWidth - 25
@@ -212,7 +216,7 @@ function hitFire() {
   })
 }
 
-//  mini sambosas 
+// ---------- mini sambosas ----------
 function addMini(x) {
   const y = 60 + Math.random() * (oilLine - 150)
   const el = document.createElement('img')
@@ -223,3 +227,58 @@ function addMini(x) {
   game.append(el)
   minis.push({ x: x, y: y, els: [el] })
 }
+
+// touching a mini makes the sambosa grow a little
+function eatMinis() {
+  minis.forEach(m => {
+    const size = sambosa.size
+    const touching =
+      sambosaLeft < m.x + settings.miniSize && sambosaLeft + size > m.x &&
+      sambosa.y < m.y + settings.miniSize && sambosa.y + size > m.y
+    if (touching) {
+      kill(m)
+      setSize(Math.min(settings.maxSize, sambosa.size + settings.growStep))
+    }
+  })
+  minis = minis.filter(m => !m.dead)
+}
+
+// ---------- end of round ----------
+function endGame(result) {
+  state = 'over'
+  clearInterval(loop)
+  endTime = Date.now()
+
+  if (score > best) {
+    best = score
+    localStorage.setItem('sambosaBest', best)
+    bestEl.textContent = best
+  }
+
+  titleEl.textContent = result === 'win' ? 'You Win! 🎉' : 'Game Over'
+  if (result !== 'win') game.classList.add('shake')
+  if (result === 'oil') {
+    sambosaEl.classList.add('fried')
+    sambosaEl.style.top = oilLine + 'px' // sink into the oil
+  }
+
+  playBtn.textContent = '↻ Play Again'
+  screenEl.style.display = 'flex'
+}
+
+// ---------- controls ----------
+updateSizes()
+setBackground(0) // show the first picture on the start screen
+window.addEventListener('resize', updateSizes)
+playBtn.addEventListener('click', startGame)
+game.addEventListener('pointerdown', jump)
+
+// Space and Up Arrow both make the sambosa jump
+document.addEventListener('keydown', e => {
+  const isJumpKey = e.code === 'Space' || e.code === 'ArrowUp'
+  if (!isJumpKey) return
+  e.preventDefault() // stop the page from scrolling
+
+  if (state === 'playing') jump()
+  else if (Date.now() - endTime > 700) startGame() // short wait so you don't restart by accident
+})
