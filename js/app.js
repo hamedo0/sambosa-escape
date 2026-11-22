@@ -305,6 +305,7 @@ function endGame(result) {
 
 // ---------- controls ----------
 updateSizes()
+backgrounds.forEach(bg => (new Image().src = bg.image)) // load all pictures now, so the switch has no black flash
 makeFlames()
 setBackground(0) // show the first picture on the start screen
 window.addEventListener('resize', updateSizes)
