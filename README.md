@@ -1,4 +1,4 @@
-# GA Sambosa
+#  Sambosa Escape
 
 ## Game Link
 
