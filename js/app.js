@@ -21,7 +21,6 @@ let score = 0
 let timer = 0
 let speed = 0
 let wobble = 0 // counts up each frame to move the wobble
-let bgIndex = 0
 let loop = null
 let endTime = 0
 let width = 0
@@ -51,7 +50,6 @@ function setSize(newSize) {
 }
 
 function setBackground(index) {
-  bgIndex = index
   const bg = backgrounds[index]
   backdropEl.style.backgroundImage = `url('${bg.image}')`
   backdropEl.setAttribute('aria-label', bg.alt)
