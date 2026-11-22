@@ -36,7 +36,15 @@ A sambosa jumps through fire to escape a frying pan. The BIBF building is in the
 
 Playing screen:
 
-![Playing screen of GA Sambosa](screenshot.png)
+![Playing screen of Sambosa Escape](screenshot.png)
+
+Win Screen:
+
+![Win screen of Sambosa Escape](images/screenshot-win.png)
+
+Game Over Screen:
+
+![Game Over screen of Sambosa Escape](images/screenshot-lose.png)
 
 ## Future Enhancements
 
