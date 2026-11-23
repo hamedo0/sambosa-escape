@@ -1,4 +1,4 @@
-#  Sambosa Escape
+# Sambosa Escape
 
 ## Game Link
 
@@ -56,6 +56,6 @@ Game Over Screen:
 
 ## Credits
 
-- Images: I generated from CHATGPT  
-- Fire video: TODO: fire.mp4 source
+- Images: I generated from CHATGPT
+- Fire video: https://www.vecteezy.com/video/66947130-animated-fire-glowing
 - Sound effects made with Claude (AI)
