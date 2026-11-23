@@ -2,7 +2,7 @@
 
 ## Game Link
 
-https://hamedo0.github.io/ga-sambosa/
+https://hamedo0.github.io/sambosa-escape/
 
 Planning board: https://github.com/users/hamedo0/projects/2
 
