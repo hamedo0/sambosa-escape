@@ -4,6 +4,8 @@
 
 https://hamedo0.github.io/ga-sambosa/
 
+Planning board: https://github.com/users/hamedo0/projects/2
+
 ## Technologies Used
 
 - HTML
