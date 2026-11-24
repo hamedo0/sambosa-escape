@@ -10,16 +10,16 @@ Planning board: https://github.com/users/hamedo0/projects/2
 
 - HTML
 - CSS
-- JavaScript
+- JS
 
 ## Description
 
-A sambosa jumps through fire to escape a frying pan. The BIBF building is in the background. Score 20 points to win.
+A side-scrolling game. Sambosa jumps through fire to escape a frying pan. with a different images of 3 BIBF building in the background. The player should pass 20 points to win. if the player touches the fire or falls on the oil will lose.
 
 ## How to Play
 
-- Jump with the Space key, the Up Arrow key, or a click.
-- Pass through the fire to score. Eat the small sambosas to grow.
+- Jumping = the Space key, Up Arrow key, or a click.
+- Pass through the fire to score. Eat the small sambosas to grow and size increase.
 - Reach 20 points to win.
 
 ## User Stories
@@ -50,9 +50,9 @@ Game Over Screen:
 
 ## Future Enhancements
 
-- Add a pause button.
+- Add  pause button.
 - Add more fire patterns.
-- Add a difficulty choice.
+- Add  difficulty choice.
 
 ## Credits
 
